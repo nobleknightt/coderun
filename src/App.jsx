@@ -8,7 +8,24 @@ import runIcon from "./assets/images/run.png";
 
 export default function App() {
   const editorRef = useRef(null);
+  const [ready, setReady] = useState(false)
   const [output, setOutput] = useState("")
+
+  async function ping() {
+    setReady(false);
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/ping`, {method: "GET"});
+      setReady(true);
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    ping();
+    const intervalId = setInterval(ping, 300000); // 5 minutes
+    return () => clearInterval(intervalId);
+  }, []);
 
   // useEffect(() => {
   //   loader.init().then((monaco) => {
@@ -23,22 +40,25 @@ export default function App() {
 
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
-    editorRef.current.updateOptions({ theme: 'vs' });
-    // editorRef.current.updateOptions({ theme: 'vs-dark' });
-    // editorRef.current.updateOptions({ theme: 'one-dark-pro' });
+    editorRef.current.updateOptions({ theme: "vs" });
+    // editorRef.current.updateOptions({ theme: "vs-dark" });
+    // editorRef.current.updateOptions({ theme: "one-dark-pro" });
   }
 
   async function runCode() {
     const code = editorRef.current.getValue();
 
     try {
-      const response = await fetch(import.meta.env.VITE_API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/execute`, 
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ code }),
+        }
+      );
       const data = await response.json();
       setOutput(data.output);
     } catch (error) {
@@ -63,17 +83,17 @@ export default function App() {
           <div className="h-full w-fit flex items-center justify-center rounded-t border-2 border-b-0 bg-neutral-100">
             <div className="flex px-2 gap-2">
               <img src={pythonIcon} width={24} height={24}></img>
-              <span>Python</span>
+              <span className="font-semibold tracking-tight">Python</span>
             </div>
           </div>
           <div className="flex gap-1">
-            <button className="rounded flex items-center justify-center gap-2 px-2 border-2 bg-neutral-100 outline-0" onClick={runCode}>
+            <button className="rounded flex items-center justify-center gap-2 px-2 border-2 bg-neutral-100 outline-0 disabled:cursor-not-allowed" onClick={runCode} disabled={!ready}>
               <img src={runIcon} width={16} className="rotate-90"></img>
-              <span>Run</span>
+              <span className="font-semibold tracking-tight">Run</span>
             </button>
             <button className="rounded flex items-center justify-center gap-2 px-2 border-2 bg-neutral-100 outline-0" onClick={clearCode}>
               <img src={clearIcon} width={16}></img>
-              <span>Clear</span>
+              <span className="font-semibold tracking-tight">Clear</span>
             </button>
           </div>
         </div>
@@ -83,7 +103,7 @@ export default function App() {
             defaultValue={`print("Hello World!")`}
             onMount={handleEditorDidMount}
             options={{
-              fontFamily: "'Intel One Mono', monospace",
+              fontFamily: "'Source Code Pro', monospace",
               fontSize: 16,
               fontWeight: '400',
               minimap: { enabled: false },
@@ -96,13 +116,13 @@ export default function App() {
           <div className="h-full w-fit flex items-center justify-center rounded-t border-2 border-b-0 bg-neutral-100">
             <div className="flex px-2 gap-2">
               <img src={outputIcon} width={24}></img>
-              <span>Output</span>
+              <span className="font-semibold tracking-tight">Output</span>
             </div>
           </div>
           <div className="flex gap-2">
             <button className="rounded flex items-center justify-center gap-2 px-2 border-2 bg-neutral-100 outline-0" onClick={clearOutput}>
               <img src={clearIcon} width={16}></img>
-              <span>Clear</span>
+              <span className="font-semibold tracking-tight">Clear</span>
             </button>
           </div>
         </div>
