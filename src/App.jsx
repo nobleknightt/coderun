@@ -105,8 +105,10 @@ export default function App() {
             options={{
               fontFamily: "'Source Code Pro', monospace",
               fontSize: 16,
-              fontWeight: '400',
+              fontWeight: "400",
               minimap: { enabled: false },
+              letterSpacing: 0.8,
+              scrollbar: { useShadows: false },
             }}
           />
         </div>
