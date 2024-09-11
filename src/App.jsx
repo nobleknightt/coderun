@@ -122,6 +122,7 @@ export default function App() {
               minimap: { enabled: false },
               letterSpacing: 0.8,
               scrollbar: { useShadows: false },
+              wordWrap: "on",
             }}
           />
         </div>
