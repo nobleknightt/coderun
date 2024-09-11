@@ -30,11 +30,19 @@ pre {
 }
 
 ::-webkit-scrollbar-track {
-  background: white;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e5e5e5;
+  background: #e5e5e5; /* neutral-200 */
   border: 0.25rem solid white;
   border-radius: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background: #262626; /* neutral-800 */
+    border: 0.25rem solid rgb(30,30,30);
+    border-radius: 1rem;
+  }
 }
