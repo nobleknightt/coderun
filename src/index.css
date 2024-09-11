@@ -20,8 +20,9 @@ body {
   margin: 0rem;
 }
 
-pre {
+pre, code {
   font-family: 'Source Code Pro', monospace;
+  text-wrap: wrap;
 }
 
 ::-webkit-scrollbar {
