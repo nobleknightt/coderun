@@ -84,7 +84,7 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen w-screen grid grid-cols-2 gap-2 p-2 dark:bg-[rgb(30,30,30)]">
+    <div className="h-screen w-screen grid grid-cols-1 grid-rows-[80%_20%] md:grid-cols-2 md:grid-rows-1 gap-2 p-2 dark:bg-[rgb(30,30,30)]">
       <div className="flex flex-col w-full h-full">
         <div className="w-full min-h-8 flex gap-2 items-center justify-between">
           <div className="h-full w-fit flex items-center justify-center rounded-t border-2 border-b-0 bg-neutral-100 dark:bg-[rgb(30,30,30)] dark:text-white">
