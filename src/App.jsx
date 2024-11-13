@@ -6,13 +6,15 @@ import Editor, { loader } from "@monaco-editor/react";
 // import runIcon from "./assets/images/run.png";
 // import oneDarkProTheme from "./assets/themes/OneDark-Pro.json";
 import Markdown from 'react-markdown'
+import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
+import toast, { Toaster } from 'react-hot-toast';
 
 
 export default function App() {
   const editorRef = useRef(null);
   const [ready, setReady] = useState(false)
   const [output, setOutput] = useState("")
-  const [suggestion, setSuggestion] = useState("")
+  const [isError, setIsError] = useState(false)
 
   async function ping() {
     setReady(false);
@@ -70,28 +72,25 @@ export default function App() {
         }
       );
       const data = await response.json();
-      setOutput(data.output);
-      setSuggestion(data.suggestion)
+      if (data.toast.length > 0) {
+        toast(data.toast)
+      }
+      if (data.stderr.length > 0) {
+        setOutput(data.stderr)
+        setIsError(true)
+      } else {
+        setOutput(data.stdout)
+        setIsError(false)
+      }
     } catch (error) {
       setOutput(`Error: ${error.message}`);
-      setSuggestion("")
     }
-  }
-
-  function clearCode() {
-    if (editorRef.current) {
-      editorRef.current.setValue("");
-    }
-  }
-
-  function clearOutput() {
-    setOutput("")
-    setSuggestion("")
   }
 
   return (
-    <div className="h-screen w-screen grid grid-cols-1 grid-rows-[80%_20%] md:grid-cols-2 md:grid-rows-1 gap-2 p-2 dark:bg-[rgb(30,30,30)]">
-      <div className="flex flex-col w-full h-full">
+
+    <div className="h-screen w-screen bg-zinc-900 text-zinc-400 font-medium">
+      {/* <div className="flex flex-col w-full h-full">
         <div className="w-full min-h-8 flex gap-2 items-center justify-between">
           <div className="h-full w-fit flex items-center justify-center rounded-t border-2 border-b-0 bg-neutral-100 dark:bg-[rgb(30,30,30)] dark:text-white">
             <div className="flex px-2 gap-2 ">
@@ -174,7 +173,70 @@ export default function App() {
               : null
           }
         </div>
-      </div>
+      </div> */}
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          className: '',
+          success: {
+            duration: 3000,
+            theme: {
+              primary: 'green',
+              secondary: 'black',
+            },
+          },
+        }}
+      />
+      <PanelGroup direction="horizontal" className="p-2">
+        <Panel className="w-full bg-zinc-800 rounded-md" defaultSize={36} minSize={3.2}>
+          <div className="px-4 py-2 w-full bg-zinc-700">Chat</div>
+          <div className="flex flex-col px-6 h-[92%] items-center justify-end">
+            <input className="bg-zinc-700 rounded-lg min-h-12 w-full px-4" placeholder="Ask AI ... (Coming Soon)"></input>
+          </div>
+
+        </Panel>
+        <PanelResizeHandle className="w-2" />
+        <Panel defaultSize={64} minSize={3.2}>
+          <PanelGroup direction="vertical">
+            <Panel className="w-full rounded-md bg-[rgb(30,30,30)]" defaultSize={64} minSize={5.6}>
+              <div className="p-1 w-full bg-zinc-700 flex gap-2 items-center mb-2">
+                <button className="hover:bg-zinc-600 hover:text-zinc-300 rounded-md px-4 py-1">Python</button>
+                <button className="hover:bg-zinc-600 hover:text-zinc-300 rounded-md px-4 py-1 flex items-center justify-center gap-2" onClick={runCode} disabled={!ready}>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
+                    <path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" />
+                  </svg>
+                  <span className="">Run</span>
+                </button>
+              </div>
+              <Editor
+                defaultLanguage="python"
+                defaultValue={`print("Hello World!")`}
+                onMount={handleEditorDidMount}
+                options={{
+                  fontFamily: "'Source Code Pro', monospace",
+                  fontSize: 16,
+                  fontWeight: "400",
+                  minimap: { enabled: false },
+                  letterSpacing: 0.8,
+                  scrollbar: { useShadows: false },
+                  wordWrap: "on",
+                }}
+              />
+            </Panel>
+            <PanelResizeHandle className="h-2" />
+            <Panel className="w-full bg-zinc-800 rounded-md" defaultSize={36} minSize={5.6}>
+              <div className="px-4 py-2 w-full bg-zinc-700">Output</div>
+              <pre className={`px-4 py-2 ${isError ? "text-red-400": ""}`}>
+                {output}
+              </pre>
+            </Panel>
+          </PanelGroup>
+        </Panel>
+      </PanelGroup>
     </div>
   );
 }
