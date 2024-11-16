@@ -1,5 +1,11 @@
-# CodeRun
-An Online Compiler with AI Chat
+<div align="center">
+  <a href="https://nobleknightt.github.io/coderun">nobleknightt.github.io/coderun</a>
+  <br/>
+  <br/>
+  <img src="./screenshot.png">
+  <h1>CodeRun</h1>
+  An Online Compiler with AI Chat
+</div>
 
 <!-- # React + TypeScript + Vite
 
