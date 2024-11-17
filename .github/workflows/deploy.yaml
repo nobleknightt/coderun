@@ -39,7 +39,8 @@ jobs:
         run: npm ci
       - name: Build
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_API_URL: ${{ env.VITE_API_URL }}
+          VITE_CHAT_API_URL: ${{ env.VITE_CHAT_API_URL }}
         run: npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v4
