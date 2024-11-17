@@ -87,8 +87,8 @@ export default function EditorComponent({
           fontFamily: "'Source Code Pro', monospace",
           fontSize: 14,
           minimap: { enabled: false },
-          letterSpacing: 0.8,
-          scrollbar: { useShadows: false },
+          // letterSpacing: 0.8,
+          scrollbar: { useShadows: false},
           wordWrap: "on",
           contextmenu: false,
         }}
