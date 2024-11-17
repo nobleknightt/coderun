@@ -22,7 +22,7 @@ function SyntaxHighlightedCode(props: any) {
   }, [props.className, props.children]);
 
   return (
-    <code {...props} ref={ref} className={`rounded my-1 px-1 !bg-background`}/>
+    <code {...props} ref={ref} className={`rounded my-1 px-1 !bg-background`} />
   );
 }
 
@@ -33,14 +33,17 @@ interface ChatHistoryElement {
 
 function Chat() {
   const { theme } = useTheme();
-  const [chatHistory, setChatHistory] = useState<ChatHistoryElement[]>([
-    {
-      role: "user",
-      content: "Write a python program to print fibonacci numbers.",
-    },
-    {
-      role: "assistant",
-      content: `Here's a simple Python program to print Fibonacci numbers:
+  const [chatHistory, setChatHistory] = useState<ChatHistoryElement[]>([]);
+
+  useEffect(() => {
+    setChatHistory([
+      {
+        role: "user",
+        content: "Write a python program to print fibonacci numbers.",
+      },
+      {
+        role: "assistant",
+        content: `Here's a simple Python program to print Fibonacci numbers:
 
 \`\`\`python
 # Function to print Fibonacci numbers up to n terms
@@ -67,8 +70,9 @@ If you enter \`10\` for \`n\`, the program will print:
 \`\`\`
 
 You can change the number of terms by entering a different value for \`n\`.`,
-    },
-  ]);
+      },
+    ]);
+  });
 
   useEffect(() => {
     let currentTheme = theme === "dark" ? "dark" : "light";
