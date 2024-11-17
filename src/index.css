@@ -61,7 +61,15 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-    @apply overflow-hidden;
+    @apply bg-background text-foreground overflow-hidden;
+  }
+  ::-webkit-scrollbar {
+    @apply w-4 h-4;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-foreground/10 rounded-lg bg-clip-content border-4 border-solid border-transparent;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-foreground/20;
   }
 }

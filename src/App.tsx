@@ -16,12 +16,12 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import Editor from "@/components/editor";
+import Chat from "@/components/chat";
 
 function App() {
   const [source, setSource] = useState<string>("");
@@ -80,61 +80,7 @@ function App() {
             defaultSize={25}
             className="border rounded-md bg-card min-w-12"
           >
-            <div className="flex flex-col w-full h-full items-center justify-center p-2">
-              <div className="flex items-center px-2 w-full rounded border min-h-8">
-                <span className="flex items-center justify-center gap-1 text-sm font-medium">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
-                    />
-                  </svg>
-                  Chat
-                </span>
-              </div>
-              <div className="w-full h-full flex flex-col items-center justify-end pb-2 gap-2 text-sm max-w-3xl overflow-hidden">
-                <p className="bg-muted rounded px-4 py-2 self-end ml-10">
-                  Hey, how are you? Let's write some code.
-                </p>
-                <p className="bg-muted rounded px-4 py-2 self-start mr-10">
-                  Hey! I'm doing great, thanks for asking. Excited to dive into
-                  some coding! What kind of project or task do you have in mind
-                  today?
-                </p>
-              </div>
-              <div className="w-full flex gap-2 max-w-3xl">
-                <Input
-                  type="text"
-                  placeholder="Ask AI ... (Coming Soon)"
-                  className="w-full focus-visible:ring-0"
-                />
-                <Button variant="ghost" className="px-2 focus-visible:ring-0">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="size-6 scale-125"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.024-.983a1.125 1.125 0 0 1 0 1.966l-5.603 3.113A1.125 1.125 0 0 1 9 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 scale-125">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm6-2.438c0-.724.588-1.312 1.313-1.312h4.874c.725 0 1.313.588 1.313 1.313v4.874c0 .725-.588 1.313-1.313 1.313H9.564a1.312 1.312 0 0 1-1.313-1.313V9.564Z" clipRule="evenodd" />
-                  </svg> */}
-                </Button>
-              </div>
-            </div>
+            <Chat />
           </ResizablePanel>
           <ResizableHandle className="w-2 bg-muted" />
           <ResizablePanel defaultSize={75} className="min-w-12">
@@ -151,29 +97,11 @@ function App() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup className="font-sans">
-                          <SelectItem
-                            value="python"
-                          >
-                            Python
-                          </SelectItem>
-                          <SelectItem
-                            value="cpp"
-                          >
-                            C++ (Clang)
-                          </SelectItem>
-                          <SelectItem
-                            value="go"
-                          >
-                            Go
-                          </SelectItem>
-                          <SelectItem
-                            value="rust"
-                          >
-                            Rust
-                          </SelectItem>
-                          <SelectItem
-                            value="javascript"
-                          >
+                          <SelectItem value="python">Python</SelectItem>
+                          <SelectItem value="cpp">C++ (Clang)</SelectItem>
+                          <SelectItem value="go">Go</SelectItem>
+                          <SelectItem value="rust">Rust</SelectItem>
+                          <SelectItem value="javascript">
                             JavaScript (Node.js)
                           </SelectItem>
                         </SelectGroup>
@@ -306,7 +234,7 @@ function App() {
                   <TabsContent value="input" className="h-full pb-11">
                     {/* p-11: without it Textarea goes overflows out of TabsContent */}
                     <Textarea
-                      className="h-full rounded focus-visible:ring-0 font-mono"
+                      className="h-full rounded focus-visible:ring-0 font-mono text-[14px]"
                       value={stdin}
                       onInput={(
                         event: React.ChangeEvent<HTMLTextAreaElement>

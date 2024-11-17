@@ -59,11 +59,11 @@ export default function EditorComponent({
   }
 
   useEffect(() => {
-    let currentTheme = theme === "dark" ? "dark" : "";
+    let currentTheme = theme === "dark" ? "dark" : "light";
     if (theme === "system") {
       currentTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
-        : "";
+        : "light";
     }
     editorRef.current?.updateOptions({ theme: currentTheme });
   }, [theme]);
