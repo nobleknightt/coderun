@@ -25,23 +25,20 @@ export function ModeToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="font-sans">
         <DropdownMenuItem
-          className="font-['Host_Grotesk']"
           onClick={() => setTheme("light")}
         >
           <Sun className="h-[1.2rem] w-[1.2rem] scale-100" />
           Light
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="font-['Host_Grotesk']"
           onClick={() => setTheme("dark")}
         >
           <Moon className="h-[1.2rem] w-[1.2rem] scale-100" />
           Dark
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="font-['Host_Grotesk']"
           onClick={() => setTheme("system")}
         >
           <Monitor className="h-[1.2rem] w-[1.2rem] scale-100" />

@@ -73,7 +73,7 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="w-screen h-screen font-['Host_Grotesk'] p-2 bg-muted">
+      <div className="w-screen h-screen font-sans p-2 bg-muted">
         <Toaster />
         <ResizablePanelGroup direction="horizontal" className="w-full h-full">
           <ResizablePanel
@@ -150,34 +150,29 @@ function App() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectGroup>
+                        <SelectGroup className="font-sans">
                           <SelectItem
                             value="python"
-                            className="font-['Host_Grotesk']"
                           >
                             Python
                           </SelectItem>
                           <SelectItem
                             value="cpp"
-                            className="font-['Host_Grotesk']"
                           >
                             C++ (Clang)
                           </SelectItem>
                           <SelectItem
                             value="go"
-                            className="font-['Host_Grotesk']"
                           >
                             Go
                           </SelectItem>
                           <SelectItem
                             value="rust"
-                            className="font-['Host_Grotesk']"
                           >
                             Rust
                           </SelectItem>
                           <SelectItem
                             value="javascript"
-                            className="font-['Host_Grotesk']"
                           >
                             JavaScript (Node.js)
                           </SelectItem>
@@ -311,7 +306,7 @@ function App() {
                   <TabsContent value="input" className="h-full pb-11">
                     {/* p-11: without it Textarea goes overflows out of TabsContent */}
                     <Textarea
-                      className="h-full rounded focus-visible:ring-0 font-['Source_Code_Pro']"
+                      className="h-full rounded focus-visible:ring-0 font-mono"
                       value={stdin}
                       onInput={(
                         event: React.ChangeEvent<HTMLTextAreaElement>
@@ -324,7 +319,7 @@ function App() {
                       stderr.length !== 0 ? "text-red-400" : ""
                     }`}
                   >
-                    <pre className="font-['Source_Code_Pro'] text-[14px]">
+                    <pre className="font-mono text-[14px]">
                       {stderr.length !== 0 ? stderr : stdout}
                     </pre>
                   </TabsContent>
