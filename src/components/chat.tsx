@@ -27,52 +27,47 @@ function SyntaxHighlightedCode(props: any) {
 }
 
 interface ChatHistoryElement {
-  role: "system" | "user" | "assistant";
+  role: "user" | "assistant";
   content: string;
 }
 
 function Chat() {
   const { theme } = useTheme();
   const [chatHistory, setChatHistory] = useState<ChatHistoryElement[]>([]);
+  const [userContent, setUserContent] = useState<string>("")
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  async function getChatResponse() {
+    setChatHistory((prevChatHistory) => [...prevChatHistory, {"role": "user", "content": userContent}])
+    setIsLoading(true);
+    setUserContent("")
+    const _ = await fetch(`${import.meta.env.VITE_CHAT_API_URL}/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([...chatHistory, {"role": "user", "content": userContent}]),
+    });
+    const response = await _.json();
+    console.log(response)
+    setIsLoading(false);
+    setChatHistory(response);
+  }
+
+  async function ping() {
+    try {
+      await fetch(`${import.meta.env.VITE_CHAT_API_URL}/ping`, {
+        method: "GET",
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
-    setChatHistory([
-      {
-        role: "user",
-        content: "Write a python program to print fibonacci numbers.",
-      },
-      {
-        role: "assistant",
-        content: `Here's a simple Python program to print Fibonacci numbers:
-
-\`\`\`python
-# Function to print Fibonacci numbers up to n terms
-def fibonacci(n):
-    a, b = 0, 1
-    for _ in range(n):
-        print(a, end=" ")
-        a, b = b, a + b  # Update a and b to the next Fibonacci numbers
-
-# Input: Number of Fibonacci terms to print
-n = int(input("Enter the number of Fibonacci terms to print: "))
-fibonacci(n)
-\`\`\`
-
-### How it works:
-1. The function \`fibonacci(n)\` takes an integer \`n\` and prints the first \`n\` Fibonacci numbers.
-2. It starts with \`a = 0\` and \`b = 1\`, the first two Fibonacci numbers.
-3. Then, it iteratively updates \`a\` and \`b\` to the next pair of Fibonacci numbers in the sequence, printing each one.
-
-### Example output:
-If you enter \`10\` for \`n\`, the program will print:
-\`\`\`
-0 1 1 2 3 5 8 13 21 34
-\`\`\`
-
-You can change the number of terms by entering a different value for \`n\`.`,
-      },
-    ]);
-  });
+    const intervalId = setInterval(ping, 300000); // 5 minutes
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     let currentTheme = theme === "dark" ? "dark" : "light";
@@ -95,7 +90,7 @@ You can change the number of terms by entering a different value for \`n\`.`,
   }, [theme]);
 
   return (
-    <div className="flex flex-col w-full h-full items-center justify-between p-2">
+    <div className="flex flex-col w-full h-full items-center justify-between gap-2 p-2">
       <div className="flex items-center px-2 w-full rounded border min-h-8">
         <span className="flex items-center justify-center gap-1 text-sm font-medium">
           <svg
@@ -115,51 +110,86 @@ You can change the number of terms by entering a different value for \`n\`.`,
           Chat
         </span>
       </div>
-      <div className="w-full h-full flex flex-col items-center justify-end pb-2 gap-2 text-sm max-w-3xl overflow-y-auto">
-        {chatHistory.map((value, index) => (
-          <div
-            key={`chat-history-${index}`}
-            className={`w-full flex ${
-              value.role === "user"
-                ? "pl-10 justify-end"
-                : "pr-10 justify-start"
-            }`}
-          >
-            <div className="bg-muted rounded px-4 py-2 max-w-full markdown">
-              <Markdown
-                children={value.content}
-                options={{
-                  overrides: {
-                    code: SyntaxHighlightedCode,
-                  },
-                }}
-              />
+      <div className="w-full h-full overflow-y-auto">
+        <div className="m-auto flex flex-col items-center justify-end gap-2 text-sm max-w-3xl">
+          {chatHistory.map((value, index) => (
+            <div
+              key={`chat-history-${index}`}
+              className={`w-full flex ${
+                value.role === "user"
+                  ? "pl-10 justify-end"
+                  : "pr-10 justify-start"
+              }`}
+            >
+              <div className="bg-muted rounded px-4 py-2 max-w-full markdown">
+                <Markdown
+                  children={value.content}
+                  options={{
+                    overrides: {
+                      code: SyntaxHighlightedCode,
+                    },
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       <div className="w-full flex gap-2 max-w-3xl">
         <Input
           type="text"
-          placeholder="Ask AI ... (Coming Soon)"
+          value={userContent}
+          onInput={(event: React.ChangeEvent<HTMLInputElement>) => setUserContent(event.target.value)}
+          placeholder="Ask AI ..."
           className="w-full focus-visible:ring-0"
         />
-        <Button variant="ghost" className="px-2 focus-visible:ring-0">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="size-6 scale-125"
-          >
-            <path
-              fillRule="evenodd"
-              d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.024-.983a1.125 1.125 0 0 1 0 1.966l-5.603 3.113A1.125 1.125 0 0 1 9 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113Z"
-              clipRule="evenodd"
-            />
-          </svg>
-          {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 scale-125">
-          <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm6-2.438c0-.724.588-1.312 1.313-1.312h4.874c.725 0 1.313.588 1.313 1.313v4.874c0 .725-.588 1.313-1.313 1.313H9.564a1.312 1.312 0 0 1-1.313-1.313V9.564Z" clipRule="evenodd" />
-        </svg> */}
+        <Button
+          variant="ghost"
+          className="px-2 focus-visible:ring-0"
+          onClick={getChatResponse}
+        >
+          {isLoading ? (
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <style>
+                {`
+                  .spinner_ajPY {
+                    transform-origin: center;
+                    animation: spinner_AtaB 0.75s infinite linear;
+                  }
+
+                  @keyframes spinner_AtaB {
+                    100% {
+                      transform: rotate(360deg);
+                    }
+                  }
+                `}
+              </style>
+              <path
+                d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+                opacity=".25"
+                fill="currentColor"
+              />
+              <path
+                d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z"
+                className="spinner_ajPY"
+                fill="currentColor"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="size-6"
+            >
+              <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+            </svg>
+          )}
         </Button>
       </div>
     </div>
