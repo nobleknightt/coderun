@@ -34,22 +34,26 @@ interface ChatHistoryElement {
 function Chat() {
   const { theme } = useTheme();
   const [chatHistory, setChatHistory] = useState<ChatHistoryElement[]>([]);
-  const [userContent, setUserContent] = useState<string>("")
+  const [userContent, setUserContent] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // TODO: add retry option in case of error/failure
   async function getChatResponse() {
-    setChatHistory((prevChatHistory) => [...prevChatHistory, {"role": "user", "content": userContent}])
+    const updatedChatHistory: ChatHistoryElement[] = [
+      ...chatHistory,
+      { role: "user", content: userContent },
+    ];
+    setChatHistory(updatedChatHistory);
     setIsLoading(true);
-    setUserContent("")
+    setUserContent("");
     const _ = await fetch(`${import.meta.env.VITE_CHAT_API_URL}/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify([...chatHistory, {"role": "user", "content": userContent}]),
+      body: JSON.stringify(updatedChatHistory),
     });
     const response = await _.json();
-    console.log(response)
     setIsLoading(false);
     setChatHistory(response);
   }
@@ -139,7 +143,9 @@ function Chat() {
         <Input
           type="text"
           value={userContent}
-          onInput={(event: React.ChangeEvent<HTMLInputElement>) => setUserContent(event.target.value)}
+          onInput={(event: React.ChangeEvent<HTMLInputElement>) =>
+            setUserContent(event.target.value)
+          }
           placeholder="Ask AI ..."
           className="w-full focus-visible:ring-0"
         />
