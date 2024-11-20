@@ -11,10 +11,19 @@ hljs.registerLanguage("python", python);
 // https://github.com/quantizor/markdown-to-jsx?tab=readme-ov-file#syntax-highlighting
 function SyntaxHighlightedCode(props: any) {
   const ref = useRef<HTMLElement | null>(null);
+  const [isCodeBlock, setIsCodeBlock] = useState<boolean>(false);
+  const [language, setLanguage] = useState<string>("");
+  const [code, setCode] = useState<string>("");
 
   useEffect(() => {
     if (ref.current && props.className?.includes("lang-")) {
       hljs.highlightElement(ref.current);
+      setIsCodeBlock(true);
+      const language = props.className?.split('-').pop(); // written using CodeRun AI Chat
+      setLanguage(language)
+      if (ref.current.textContent) {
+        setCode(ref.current.textContent);
+      }
 
       // hljs won't reprocess the element unless this attribute is removed
       ref.current.removeAttribute("data-highlighted");
@@ -22,7 +31,38 @@ function SyntaxHighlightedCode(props: any) {
   }, [props.className, props.children]);
 
   return (
-    <code {...props} ref={ref} className={`rounded my-1 px-1 !bg-background`} />
+    <>
+      {isCodeBlock ? (
+        <div className="w-full inline-flex items-center justify-between">
+          <span className="px-2 bg-background py-1 rounded text-xs !font-sans">{language ? language : ""}</span>
+          <button
+            className="px-2 bg-background inline-flex items-center justify-center gap-1 py-1 rounded text-xs !font-sans"
+            onClick={() => window.navigator.clipboard.writeText(code)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"
+              />
+            </svg>
+            Copy code
+          </button>
+        </div>
+      ) : null}
+      <code
+        {...props}
+        ref={ref}
+        className={`relative rounded my-1 px-1 !bg-background`}
+      />
+    </>
   );
 }
 
