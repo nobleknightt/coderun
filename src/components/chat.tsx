@@ -19,8 +19,8 @@ function SyntaxHighlightedCode(props: any) {
     if (ref.current && props.className?.includes("lang-")) {
       hljs.highlightElement(ref.current);
       setIsCodeBlock(true);
-      const language = props.className?.split('-').pop(); // written using CodeRun AI Chat
-      setLanguage(language)
+      const language = props.className?.split("-").pop(); // written using CodeRun AI Chat
+      setLanguage(language);
       if (ref.current.textContent) {
         setCode(ref.current.textContent);
       }
@@ -34,7 +34,9 @@ function SyntaxHighlightedCode(props: any) {
     <>
       {isCodeBlock ? (
         <div className="w-full inline-flex items-center justify-between">
-          <span className="px-2 bg-background py-1 rounded text-xs !font-sans">{language ? language : ""}</span>
+          <span className="px-2 bg-background py-1 rounded text-xs !font-sans">
+            {language ? language : ""}
+          </span>
           <button
             className="px-2 bg-background inline-flex items-center justify-center gap-1 py-1 rounded text-xs !font-sans"
             onClick={() => window.navigator.clipboard.writeText(code)}
@@ -186,6 +188,11 @@ function Chat() {
           onInput={(event: React.ChangeEvent<HTMLInputElement>) =>
             setUserContent(event.target.value)
           }
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              getChatResponse();
+            }
+          }}
           placeholder="Ask AI ..."
           className="w-full focus-visible:ring-0"
         />
