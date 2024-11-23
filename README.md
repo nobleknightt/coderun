@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://nobleknightt.github.io/coderun">nobleknightt.github.io/coderun</a>
+  <a href="https://coderun.ajaydandge.dev">coderun.ajaydandge.dev</a>
   <br/>
   <br/>
   <img src="./screenshot.png">
