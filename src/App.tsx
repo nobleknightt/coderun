@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
@@ -214,7 +213,7 @@ function App() {
                         </span>
                       </div>
                       <Textarea
-                        className="h-full rounded focus-visible:ring-0 font-mono text-[14px]"
+                        className="h-full rounded focus-visible:ring-0 font-mono text-[14px] resize-none"
                         value={stdin}
                         onInput={(
                           event: React.ChangeEvent<HTMLTextAreaElement>
