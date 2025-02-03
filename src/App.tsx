@@ -187,71 +187,79 @@ function App() {
                 </div>
               </ResizablePanel>
               <ResizableHandle className="p-1 bg-muted" />
-              <ResizablePanel
-                defaultSize={25}
-                className="border rounded-md bg-card min-h-12"
-              >
-                <Tabs
-                  defaultValue="output"
-                  className="w-full h-full p-2 overflow-hidden"
-                >
-                  <TabsList className="border w-full rounded justify-start bg-card h-8 gap-2">
-                    <TabsTrigger value="input" className="gap-1 px-2 h-6">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-                        />
-                      </svg>
-                      Input
-                    </TabsTrigger>
-                    <TabsTrigger value="output" className="gap-1 px-2 h-6">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-                        />
-                      </svg>
-                      Output
-                    </TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="input" className="h-full pb-11">
-                    {/* p-11: without it Textarea goes overflows out of TabsContent */}
-                    <Textarea
-                      className="h-full rounded focus-visible:ring-0 font-mono text-[14px]"
-                      value={stdin}
-                      onInput={(
-                        event: React.ChangeEvent<HTMLTextAreaElement>
-                      ) => setStdin(event.target.value)}
-                    />
-                  </TabsContent>
-                  <TabsContent
-                    value="output"
-                    className={`px-2 h-full !overflow-auto pb-11 ${
-                      stderr.length !== 0 ? "text-red-400" : ""
-                    }`}
+              <ResizablePanel defaultSize={25} className="min-h-12">
+                <ResizablePanelGroup direction="horizontal">
+                  <ResizablePanel
+                    defaultSize={50}
+                    className="border rounded-md bg-card min-w-12"
                   >
-                    <pre className="font-mono text-[14px]">
-                      {stderr.length !== 0 ? stderr : stdout}
-                    </pre>
-                  </TabsContent>
-                </Tabs>
+                    <div className="flex flex-col w-full h-full items-center justify-between gap-2 p-2">
+                      <div className="flex items-center px-2 w-full rounded border min-h-8 min-w-8">
+                        <span className="flex items-center justify-start gap-1 text-sm font-medium overflow-hidden">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-4 min-w-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                            />
+                          </svg>
+                          Input
+                        </span>
+                      </div>
+                      <Textarea
+                        className="h-full rounded focus-visible:ring-0 font-mono text-[14px]"
+                        value={stdin}
+                        onInput={(
+                          event: React.ChangeEvent<HTMLTextAreaElement>
+                        ) => setStdin(event.target.value)}
+                      />
+                    </div>
+                  </ResizablePanel>
+                  <ResizableHandle className="p-1 bg-muted" />
+                  <ResizablePanel
+                    defaultSize={50}
+                    className="border rounded-md bg-card min-w-12"
+                  >
+                    <div className="flex flex-col w-full h-full items-center justify-between gap-2 p-2">
+                      <div className="flex items-center px-2 w-full rounded border min-h-8 min-w-8">
+                        <span className="flex items-center justify-start gap-1 text-sm font-medium overflow-hidden">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-4 min-w-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                            />
+                          </svg>
+                          Output
+                        </span>
+                      </div>
+                      <div className="w-full h-full px-2 overflow-y-auto overflow-x-hidden ">
+                      <pre
+                        className={`font-mono text-[14px] ${
+                          stderr.length !== 0 ? "text-red-400" : ""
+                        }`}
+                      >
+                        {stderr.length !== 0 ? stderr : stdout}
+                      </pre>
+
+                      </div>
+                    </div>
+                  </ResizablePanel>
+                </ResizablePanelGroup>
               </ResizablePanel>
             </ResizablePanelGroup>
           </ResizablePanel>

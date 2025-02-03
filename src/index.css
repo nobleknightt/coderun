@@ -72,4 +72,10 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-foreground/20;
   }
+  p + pre {
+    @apply pt-2;
+  }  
+  pre + p {
+    @apply pt-2;
+  }  
 }
