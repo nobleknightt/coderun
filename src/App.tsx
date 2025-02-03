@@ -246,7 +246,7 @@ function App() {
                           Output
                         </span>
                       </div>
-                      <div className="w-full h-full px-2 overflow-y-auto overflow-x-hidden ">
+                      <div className="w-full h-full px-2 overflow-auto">
                       <pre
                         className={`font-mono text-[14px] ${
                           stderr.length !== 0 ? "text-red-400" : ""
